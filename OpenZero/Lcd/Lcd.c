@@ -189,24 +189,31 @@ void LCD_writeText( unsigned char *text )
 	}		
 }
 
+
+/// \brief Display 4 digits.
+/// 
 void LCD_writeNum( uint16_t num )
 {
+	// clear symbols
 	Lcd_Symbol( DOT, 0 );
 	Lcd_Symbol( COLON, 0 );
-	if( num>=1000 )
-		Lcd_Map(0,'0'+(num/1000)%10);
-	else
-		Lcd_Map(0,' ');
-	if(num>=100)
-		Lcd_Map(1,'0'+(num/100)%10);
-	else
-		Lcd_Map(1,' ');
-	if(num>=10)
-		Lcd_Map(2,'0'+(num/10)%10);
-	else
-		Lcd_Map(2,' ');
-	Lcd_Map(3,'0'+num%10);
+	
+	// 4 digits, starting last
+	for(int8_t i = 3; i >= 0; i--)
+	{
+		// write digit or blank
+		if( num )
+		{
+			Lcd_Map(i,'0' + num%10);
+		}
+		else
+		{
+			Lcd_Map(i,' ');
+		}
+		num /= 10;
+	}
 }
+
 
 void LCD_progressbar(uint16_t value, uint16_t max)
 {
