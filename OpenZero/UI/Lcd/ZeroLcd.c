@@ -1,15 +1,19 @@
-/*
- * 14Segment.c
- *
- * Created: 15-2-2012 21:16:33
- *  Author: Willem
- */ 
+/// \file ZeroLcd.c
+/// 
+/// LCD segment mapping and low-level functions.
+/// 
+/// original header: 14Segment.c / Created: 15-2-2012 21:16:33 / Author: Willem
+
 
 #include "ZeroLcd.h"
 
+
+/// \brief .
+/// 
+/// 
 int lcdmap[] = 
 {
-//	  ABCDEFGHIJKLMN
+	//ABCDEFGHIJKLMN
 	0b00000011111111,	// *
 	0b00000011010010,	// +
 	0b00000000000100,	// ,
@@ -62,6 +66,10 @@ int lcdmap[] =
 	0
 };
 
+
+/// \brief .
+/// 
+/// 
 int segmentmap[][14][2] = 
 {
 	// mapped out by position: 1 - 7
@@ -74,17 +82,35 @@ int segmentmap[][14][2] =
 	{ {17,4},{17,6},{2,6},{2,5},{2,3},{12,3},{7,4},{12,6},{12,4},{12,5},{17,5},{2,4},{7,5},{7,6} } // 4
 };
 
+
+/// \brief .
+/// 
+/// 
 int barmap[24][2] = 
 { 
 	// all the 24 dots on the scale
-	{11,0},{6,0},{1,0},{1,1},{6,1},{11,1},{11,2},{6,2},{1,2},{1,3},{6,3},{11,3},{11,4},{6,4},{1,4},{1,5},{6,5},{11,5},{16,6},{11,6},{6,6},{1,6},{1,7},{6,7} // BAR1-BAR24
+	// BAR1-BAR24
+	{11,0},{ 6,0},{ 1,0},{ 1,1},
+	{ 6,1},{11,1},{11,2},{ 6,2},
+	{ 1,2},{ 1,3},{ 6,3},{11,3},
+	{11,4},{ 6,4},{ 1,4},{ 1,5},
+	{ 6,5},{11,5},{16,6},{11,6},
+	{ 6,6},{ 1,6},{ 1,7},{ 6,7}
 };
-	
+
+
+/// \brief .
+/// 
+/// 
 int daymap[7][2] =
 {
 	{16,0},{16,1},{16,2},{16,3},{16,4},{16,5},{11,7}
 };
-	
+
+
+/// \brief .
+/// 
+/// 
 void Lcd_Day( unsigned char dayofweek )
 {
 	for( unsigned char i = 0; i<7; i++ )
@@ -102,10 +128,14 @@ void Lcd_Day( unsigned char dayofweek )
 				LCDDR16|=(1<<daymap[i][1]);
 			else
 				LCDDR16&=~(1<<daymap[i][1]);
-		}		
-	}		
+		}
+	}
 }
-	
+
+
+/// \brief .
+/// 
+/// 
 void Lcd_DaysOn( void )
 {
 	for( unsigned char i = 0; i<7; i++ )
@@ -114,9 +144,13 @@ void Lcd_DaysOn( void )
 			LCDDR11|=(1<<daymap[i][1]);
 		else
 			LCDDR16|=(1<<daymap[i][1]);
-	}		
-}	
+	}
+}
 
+
+/// \brief .
+/// 
+/// 
 void Lcd_DaysOff( void )
 {
 	for( unsigned char i = 0; i<7; i++ )
@@ -125,9 +159,13 @@ void Lcd_DaysOff( void )
 			LCDDR11&=~(1<<daymap[i][1]);
 		else
 			LCDDR16&=~(1<<daymap[i][1]);
-	}		
-}	
+	}
+}
 
+
+/// \brief .
+/// 
+/// 
 void Lcd_Bar( unsigned char index, unsigned char on )
 {
 	// index is 0 based position
@@ -164,17 +202,25 @@ void Lcd_Bar( unsigned char index, unsigned char on )
 		default :
 			break;
 	}
-		
-}	
+	
+}
 
+
+/// \brief .
+/// 
+/// 
 void Lcd_FillBar( unsigned char index )
 {
 	for( unsigned char i = 0; i<MAXBARS; i++ )
 	{
 		Lcd_Bar( i, i<index );
-	}	
+	}
 }
-	
+
+
+/// \brief .
+/// 
+/// 
 void Lcd_Symbol( LCDSYMBOL symbol, unsigned char on )
 {
 	switch( symbol )
@@ -258,18 +304,26 @@ void Lcd_Symbol( LCDSYMBOL symbol, unsigned char on )
 				LCDDR0&=~(1<<0);
 			break;
 		default:
-			break;	
-	}	
-}	
+			break;
+	}
+}
 
+
+/// \brief .
+/// 
+/// 
 void Lcd_SymbolsOff( void )
 {
 	for( unsigned char i = 0; i<MAXSYMBOLS; i++ )
 	{
 		Lcd_Symbol( i, 0 );
-	}		
+	}
 }
-	
+
+
+/// \brief .
+/// 
+/// 
 void Lcd_Map(unsigned char position, unsigned char character)
 {
 	unsigned char lcd_register;
